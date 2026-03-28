@@ -1,5 +1,7 @@
 # 财务记账系统 (Financial Records System) v2
 
+[![CI](https://github.com/guoxue-platform/financial-records/actions/workflows/ci.yml/badge.svg)](https://github.com/guoxue-platform/financial-records/actions/workflows/ci.yml)
+
 内部收支记账工具 + 发票管理 + 报销审批流。
 
 [![CI](https://github.com/guoxue-platform/financial-records/actions/workflows/ci.yml/badge.svg)](https://github.com/guoxue-platform/financial-records/actions)

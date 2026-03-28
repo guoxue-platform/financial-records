@@ -28,12 +28,12 @@ jobs:
           cd backend
           python init_sample_data.py
 
-      - name: Run tests
+      - name: Verify app loads
         run: |
           cd backend
           python -c "from main import app; print('App loads OK')"
 
-  deploy:
+  docker-build:
     runs-on: ubuntu-latest
     needs: test
     if: github.ref == 'refs/heads/main'
@@ -41,19 +41,20 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Set up Python
-        uses: actions/setup-python@v5
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build Docker image
+        uses: docker/build-push-action@v5
         with:
-          python-version: '3.11'
+          context: .
+          push: false
+          tags: financial-records:latest
+          load: true
 
-      - name: Install dependencies
+      - name: Verify container runs
         run: |
-          cd backend
-          pip install -r requirements.txt
-
-      - name: Start server
-        run: |
-          cd backend
-          nohup uvicorn main:app --host 0.0.0.0 --port 8000 &
-          sleep 3
-          curl -f http://localhost:8000/docs || exit 1
+          docker run -d --name fr-test -p 8000:8000 -e PORT=8000 financial-records:latest
+          sleep 5
+          curl -f http://localhost:8000/docs || (docker logs fr-test; exit 1)
+          docker stop fr-test
