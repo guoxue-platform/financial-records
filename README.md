@@ -2,6 +2,27 @@
 
 内部收支记账工具 + 发票管理 + 报销审批流。
 
+[![CI](https://github.com/guoxue-platform/financial-records/actions/workflows/ci.yml/badge.svg)](https://github.com/guoxue-platform/financial-records/actions)
+
+**GitHub 仓库：** https://github.com/guoxue-platform/financial-records
+
+## 目录结构
+
+```
+financial-records/
+├── .gitignore
+├── README.md
+└── backend/
+    ├── .env.example        # 环境变量示例
+    ├── main.py             # FastAPI 入口
+    ├── models.py            # Pydantic 数据模型
+    ├── database.py          # SQLite 操作层
+    ├── init_sample_data.py  # 示例数据初始化
+    ├── finance.db           # SQLite 数据库文件（已初始化）
+    ├── requirements.txt     # Python 依赖
+    └── venv/               # Python 虚拟环境（勿提交）
+```
+
 ## 快速启动
 
 ```bash
@@ -12,6 +33,17 @@ uvicorn main:app --host 0.0.0.0 --port 8001 --reload
 ```
 
 API 文档：http://localhost:8001/docs
+
+## 环境变量
+
+复制 `.env.example` 为 `.env` 并按需修改：
+
+| 变量 | 默认值 | 说明 |
+|------|--------|------|
+| DATABASE_URL | finance.db | 数据库路径 |
+| PORT | 8001 | 服务端口 |
+| CORS_ORIGINS | * | CORS 白名单 |
+| LOG_LEVEL | INFO | 日志级别 |
 
 ## 三大模块
 
@@ -112,23 +144,3 @@ API 文档：http://localhost:8001/docs
 
 - Python + FastAPI + SQLite
 - 无前端（纯API，可对接现有前端框架）
-
-## 部署
-
-### GitHub Actions CI
-
-推送至 `main` 分支自动触发：
-1. 安装依赖
-2. 初始化示例数据
-3. 启动服务并验证 `/docs` 可访问
-
-### GitHub Pages
-
-本项目为 API 服务，无静态页面托管需求。
-
-### Railway / Render（推荐）
-
-一键部署 FastAPI 至 Railway/Render：
-1. 关联 GitHub 仓库
-2. 设置 Start Command：`cd backend && uvicorn main:app --host 0.0.0.0 --port $PORT`
-3. Railway 自动检测 Python 环境
